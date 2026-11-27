@@ -1,6 +1,6 @@
 # Grace Transportation design system
 
-This is the authoritative design reference for new and revised Grace Transportation UI. It defines the standard for the planned overhaul. The current application is the baseline recorded in [the design audit](docs/design-audit.md). Implementation begins when the owner confirms that the design skill list is complete.
+This is the authoritative design reference for new and revised Grace Transportation UI. The design system is implemented in the shared and driver stylesheets. The pre-redesign reference is recorded in [the design audit](docs/design-audit.md).
 
 ## Brand and product
 
@@ -10,7 +10,7 @@ The public site should help someone understand the service and request a trip. T
 
 ## Tokens
 
-Keep semantic tokens in the Tailwind theme or a shared token stylesheet imported by `app/globals.css`. Document the final implementation here. Avoid standalone colors and font declarations in isolated components or the driver stylesheet.
+Semantic colors and font roles live in the Tailwind theme in `app/globals.css`. The same stylesheet provides the shared control, shell, section spacing and motion rules. `app/admin/driver.css` consumes those tokens for compact driver layouts. Avoid standalone colors and font declarations in components.
 
 | Role | Baseline value | Use |
 | --- | --- | --- |
@@ -19,11 +19,12 @@ Keep semantic tokens in the Tailwind theme or a shared token stylesheet imported
 | Raised surface | `#1B1C1F` | Selected controls and raised content |
 | Subtle divider | `#26282C` | Decorative separators |
 | Border | `#34363B` | Surface boundaries. Use a stronger token where the border identifies a control |
+| Control boundary | `#686B72` | Inputs and outlined buttons |
 | Quiet detail | `#6E7177` | Nonessential detail, subject to contrast checks |
 | Primary text and focus | `#F1F1EF` | Reading, focus indicators and light primary actions |
 | Secondary text | `#B6B8BC` | Supporting content, labels and help text |
 
-Add shared semantic foreground, background and border tokens for success, warning and error. Verify their contrast in context and pair them with text. Keep public surfaces monochromatic. Use an off-white primary action with dark text and verify inverse states. Use spacing increments of 4, 8, 12, 16, 24, 32, 48, 64 and 96 px. Default to an 8 px control radius, restrained panel radii and flat surfaces. Round only where the component needs it, such as a status chip.
+Success, warning, error and disabled controls use shared foreground and surface tokens. Verify their contrast in context and pair them with text. Keep public surfaces monochromatic. Use an off-white primary action with dark text and verify inverse states. Use spacing increments of 4, 8, 12, 16, 24, 32, 48, 64 and 96 px. Default to an 8 px control radius, restrained panel radii and flat surfaces. Round only where the component needs it, such as a status chip.
 
 ## Typography and layout
 
@@ -50,6 +51,13 @@ Make Requests, Upcoming, Schedule, History and Payments distinct destinations. P
 ## Patterns to avoid
 
 Avoid gradient ambience, glass panels, ornamental icons, all-capital section prefaces, decorative counts and dots, excessive pills, nested cards, repeated equal-weight card grids, and typography with no hierarchy. Use a divider or spacing for simple grouping. Use icons for navigation, a recognizable action, or a real state. Give whitespace a job, such as separating tasks or emphasizing an action. Avoid copied proprietary layouts and invented social proof.
+
+## Implemented compositions
+
+- The public header keeps a second navigation row on phones. Editorial sections align a short heading with rows or prose. The hero retains the source image’s 3:2 crop so the vehicle stays in frame.
+- Booking keeps the existing steps and fields, with conditional airport fields, review groups for route, trip and contact, and a distinct pending-request receipt with a wrapping reference.
+- Recognition and action drive the dashboard hierarchy. Summaries use simple metric columns and the queue uses bordered rows. Booking detail places pricing and the active ride action after core route details, then separates passenger information and history. The agenda uses compact open days and an expandable availability form.
+- Shared form primitives cover focus, invalid and disabled states. Server forms can use `components/action-button.tsx` for pending feedback. Navigation remains native, including the booking anchor, keyboard skip links, and dedicated driver and missing-page fallback screens.
 
 ## Before shipping a UI change
 

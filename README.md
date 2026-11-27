@@ -1,6 +1,6 @@
 # Grace Transportation
 
-Advance-booked private SUV transportation in Dallas–Fort Worth. The public landing page and booking steps are unchanged. Temesgen’s private dashboard is at `/admin` in the same Next.js application.
+Advance-booked private SUV transportation in Dallas–Fort Worth. The public site supports booking requests. Temesgen’s private driver dashboard is at `/admin` in the same Next.js application.
 
 ## Codex Cloud setup for agents
 

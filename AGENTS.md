@@ -29,5 +29,5 @@
 
 - Read root `DESIGN.md` and the relevant repository design skills under `.agents/skills/` before creating or changing any user-facing component, page, style or interaction.
 - Hallmark is pinned in `.agents/skills/hallmark/`. Read its `SKILL.md` and relevant references, then review any helper script before running it. Repository design standards and explicit owner direction govern existing Grace UI.
-- Read `docs/design-audit.md` before the overhaul. The owner must confirm that all intended skills have been provided before implementation begins.
+- Use `docs/design-audit.md` as the pre-redesign baseline. The owner confirmed the skill list and authorized the overhaul.
 - Use the shared tokens and component states, preserve existing backend and UI wiring, and verify the rendered experience across phone, tablet and desktop. Update `DESIGN.md` with intentional system changes.

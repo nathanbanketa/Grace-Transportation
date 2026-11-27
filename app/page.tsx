@@ -2,12 +2,7 @@ import Image from "next/image";
 import { Brand } from "@/components/brand";
 import { BookingForm } from "@/components/booking-form";
 
-const services = [
-  { name: "Executive travel", text: "Private transportation for meetings, conferences and business itineraries." },
-  { name: "Family trips", text: "Travel together with room for your luggage." },
-  { name: "Private events", text: "Plan your ride for dinners, celebrations and other occasions." },
-  { name: "Hourly service", text: "Reserve the Suburban by the hour for an itinerary with multiple stops." },
-];
+const services = ["Executive travel", "Family trips", "Private events", "Hourly bookings"];
 
 export default function Home() {
   return (
@@ -20,62 +15,52 @@ export default function Home() {
             <a href="#services">Services</a>
             <a href="#about">Your driver</a>
           </nav>
-          <a className="button button-outline" href="#book">Book Ahead</a>
         </div>
       </header>
       <main id="main" tabIndex={-1}>
-        <section className="shell hero" aria-labelledby="hero-title">
-          <div className="hero-mast">
-            <h1 id="hero-title">Dallas, driven.</h1>
+        <section className="hero" aria-labelledby="hero-title">
+          <div className="hero-photo">
+            <Image src="/dallas-drive.webp" alt="" fill preload sizes="100vw" />
+          </div>
+          <div className="shell hero-inner">
             <div className="hero-copy">
-              <p>Private SUV rides, booked ahead, across Dallas and Fort Worth.</p>
+              <h1 id="hero-title">Private SUV rides</h1>
+              <p>Advance bookings in Dallas and Fort Worth.</p>
               <a className="button button-light" href="#book">Book Ahead</a>
             </div>
           </div>
-          <figure className="hero-visual">
-            <div className="hero-photo">
-              <Image src="/dallas-drive.webp" alt="Illustrative black Chevrolet Suburban beside a limestone building" fill preload sizes="(max-width: 1400px) 100vw, 1320px" />
-            </div>
-            <figcaption><span>Private Chevrolet Suburban service</span><span>Dallas &amp; Fort Worth, Texas</span></figcaption>
-          </figure>
         </section>
         <section className="shell services-section" id="services">
-          <h2>From the runway<br className="desktop-break" /> to the rest of DFW.</h2>
+          <h2>Ride options</h2>
           <div className="service-layout">
             <article className="airport-service">
               <h3>Airport transfers</h3>
-              <p>Reserve a private pickup or drop-off at either Dallas airport.</p>
               <dl className="airport-list">
                 <div><dt>DFW</dt><dd>Dallas Fort Worth International</dd></div>
                 <div><dt>DAL</dt><dd>Dallas Love Field</dd></div>
               </dl>
             </article>
-            <div className="service-list">
-              {services.map(({ name, text }) => (
-                <article key={name}><h3>{name}</h3><p>{text}</p></article>
-              ))}
-            </div>
+            <ul className="service-list" role="list">
+              {services.map((name) => <li key={name}>{name}</li>)}
+            </ul>
           </div>
         </section>
         <section className="booking-band" id="book">
           <div className="shell booking-section">
             <div className="section-heading">
-              <h2>Book your ride.</h2>
-              <p>Share your trip. Temesgen will review availability and pricing before requesting a deposit.</p>
+              <h2>Book a ride</h2>
+              <p>Temesgen confirms availability and pricing before requesting a deposit.</p>
             </div>
             <BookingForm />
           </div>
         </section>
         <section className="shell about-section" id="about">
-          <h2>Temesgen, your driver.</h2>
-          <p>With over six years in the transportation industry, Temesgen personally reviews each request and drives the black Chevrolet Suburban.</p>
+          <h2>Your driver</h2>
+          <p>Temesgen has over six years of transportation experience. He reviews each request and drives the Chevrolet Suburban.</p>
         </section>
       </main>
       <footer className="site-footer">
-        <div className="shell footer">
-          <Brand />
-          <p>Private SUV transportation in Dallas and Fort Worth, Texas.</p>
-        </div>
+        <div className="shell footer"><Brand /></div>
       </footer>
     </>
   );

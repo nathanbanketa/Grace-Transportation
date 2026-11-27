@@ -38,3 +38,9 @@ Updated 2026-11-27.
 - The Hallmark bundle is already on main. This PR changes application presentation and design documentation without bundling another skill copy.
 - Deploy the new main commit through the existing Vercel project. Preserve the existing configuration and database.
 - The editorial build passed lint, type checks, all nine tests and the production build. Chromium verified phone, tablet and desktop renders and exercised booking retry, driver sign-in and schedule changes with a local API fixture. Hallmark’s public render audit reported zero failures and two documented exceptions where the panoramic image fills the area below the masthead.
+
+## Suburban hero refinement
+
+- After reviewing the editorial redesign, the owner requested a larger vehicle background, a darker theme and shorter copy. The opening uses the existing illustration edge to edge, with a crop for phones and a single booking action. Shared charcoal tokens extend into the booking and driver screens.
+- The booking flow, database and provider configuration are unchanged by this refinement.
+- Lint, type checking, nine tests, and the production build passed. Chromium covered phone, tablet and desktop, including a 320 px booking and driver workflow with a local fixture. Hallmark reported no failures or warnings and documented the photograph’s light tones as a palette-audit exception.

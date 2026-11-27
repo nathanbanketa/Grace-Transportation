@@ -16,3 +16,11 @@
 - Work on a feature branch. Run the applicable checks, commit and push from Cloud, then open a GitHub pull request for each completed implementation. Include verification and provider configuration still required. Share the PR link for browser review.
 - Update `README.md` when setup or provider steps change. Update `PROJECT_STATUS.md` with completed work, actual verification, current blockers and the next actionable step. Update this file when persistent project rules change.
 - Give the owner exact browser dashboard paths, field names and safe values for required external setup. Keep terminal commands in Cloud-only developer sections and secrets in the provider UI or the configured secret store.
+
+## Reservation operations
+
+- Require the configured UUID allowlist and an active driver row for admin access. Allow customer submissions only through the validated server endpoint and transaction RPC. Never add public booking reads.
+- Preserve audit and notification changes in the same transaction as booking changes. Store Square orders separately from bookings so retired orders and late receipts remain reconcilable.
+- Enforce single-vehicle schedule exclusivity in PostgreSQL. Keep modifications and payments safe under retries and stale updates. Reject price changes after payment unless a new business-approved settlement workflow is implemented.
+- Keep the driver service worker scoped to `/admin`. Avoid caching authenticated responses and exclude customer identifiers, route details, and contact data from push and SMS.
+- Use the PGlite database tests to validate changes to migrations, booking transitions, access controls, and payment reconciliation before pushing.

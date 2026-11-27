@@ -1,5 +1,5 @@
 import "server-only";
-import { createHmac, timingSafeEqual } from "node:crypto";
+import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { z } from "zod";
 import type { Booking } from "./database";
 
@@ -15,8 +15,20 @@ async function square(path: string, init: RequestInit = {}) {
     ...init, cache: "no-store", signal: AbortSignal.timeout(10000),
     headers: { Authorization: `Bearer ${token}`, "Square-Version": "2025-10-16", "Content-Type": "application/json" },
   });
-  if (!response.ok) throw new Error("Square request failed.");
-  return response.json();
+  if (!response.ok) throw new SquareError(response.status);
+  return response.status === 204 ? null : response.json();
+}
+
+class SquareError extends Error {
+  constructor(readonly status: number) { super("Square request failed."); }
+}
+
+export async function deactivateDepositLink(id: string) {
+  try {
+    await square(`/v2/online-checkout/payment-links/${encodeURIComponent(id)}`, { method: "DELETE" });
+  } catch (error) {
+    if (!(error instanceof SquareError) || error.status !== 404) throw error;
+  }
 }
 
 export async function createDepositLink(booking: Booking) {
@@ -24,7 +36,7 @@ export async function createDepositLink(booking: Booking) {
   const response = await square("/v2/online-checkout/payment-links", {
     method: "POST",
     body: JSON.stringify({
-      idempotency_key: booking.id,
+      idempotency_key: createHash("sha256").update(`${booking.id}:${booking.revision}`).digest("base64url"),
       quick_pay: {
         name: "Grace Transportation reservation deposit",
         location_id: location,
@@ -32,13 +44,24 @@ export async function createDepositLink(booking: Booking) {
       },
     }),
   });
-  return z.object({ payment_link: z.object({ order_id: z.string().min(1), url: z.url({ protocol: /^https$/ }) }) }).parse(response).payment_link;
+  return z.object({ payment_link: z.object({ id: z.string().min(1), order_id: z.string().min(1), url: z.url({ protocol: /^https$/ }) }) }).parse(response).payment_link;
+}
+
+export async function getOrderState(id: string) {
+  const response = await square(`/v2/orders/${encodeURIComponent(id)}`);
+  return z.object({ order: z.object({ state: z.string() }) }).parse(response).order.state;
+}
+
+export async function retrieveRefundPaymentId(id: string) {
+  const response = await square(`/v2/refunds/${encodeURIComponent(id)}`);
+  const result = z.object({ refund: z.object({ status: z.string(), payment_id: z.string().optional() }) }).parse(response);
+  return result.refund.status === "COMPLETED" ? result.refund.payment_id : undefined;
 }
 
 export async function retrievePayment(paymentId: string) {
   const response = await square(`/v2/payments/${encodeURIComponent(paymentId)}`);
   return z.object({ payment: z.object({
-    id: z.string(), status: z.string(), location_id: z.string(), order_id: z.string().optional(),
+    id: z.string(), status: z.string(), created_at: z.iso.datetime({ offset: true }), location_id: z.string(), order_id: z.string().optional(),
     amount_money: z.object({ amount: z.number().int(), currency: z.string() }),
     refunded_money: z.object({ amount: z.number().int() }).optional(),
   }) }).parse(response).payment;

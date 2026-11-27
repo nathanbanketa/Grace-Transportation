@@ -8,6 +8,7 @@ export async function authClient() {
   if (!url || !key) return null;
   const jar = await cookies();
   return createServerClient(url, key, {
+    cookieOptions: { secure: process.env.NODE_ENV === "production" },
     cookies: {
       getAll: () => jar.getAll(),
       setAll: (values) => {
@@ -21,9 +22,18 @@ export async function authClient() {
   });
 }
 
-export async function requireAdmin() {
+export async function getAdmin() {
   const client = await authClient();
   const ids = (process.env.ADMIN_USER_IDS ?? "").split(",").map((id) => id.trim()).filter(Boolean);
-  const { data } = client ? await client.auth.getUser() : { data: null };
-  if (!data?.user || !ids.includes(data.user.id)) redirect("/admin/login");
+  if (!client || !ids.length) return null;
+  const { data } = await client.auth.getUser();
+  if (!data.user || !ids.includes(data.user.id)) return null;
+  const { data: driver } = await client.from("drivers").select("id, display_name").eq("id", data.user.id).maybeSingle();
+  return driver as { id: string; display_name: string } | null;
+}
+
+export async function requireAdmin() {
+  const driver = await getAdmin();
+  if (!driver) redirect("/admin/login");
+  return driver;
 }

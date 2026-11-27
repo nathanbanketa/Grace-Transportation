@@ -1,12 +1,15 @@
+import { after } from "next/server";
 import { z } from "zod";
-import { database, type Booking } from "@/lib/database";
-import { retrievePayment, verifySquareSignature } from "@/lib/square";
-import { sendBookingEmail } from "@/lib/notifications";
+import { database } from "@/lib/database";
+import { retrievePayment, retrieveRefundPaymentId, verifySquareSignature } from "@/lib/square";
+import { drainNotifications } from "@/lib/notifications";
+import { BodyTooLarge, readBody } from "@/lib/request-body";
 
-const eventSchema = z.object({ type: z.string(), data: z.object({ id: z.string().max(192) }) });
+const eventSchema = z.object({ type: z.string(), data: z.object({ id: z.string().min(1).max(192) }) });
 
 export async function POST(request: Request) {
-  const raw = await request.text();
+  let raw: string;
+  try { raw = await readBody(request, 65536); } catch (error) { return new Response(null, { status: error instanceof BodyTooLarge ? 413 : 400 }); }
   if (!verifySquareSignature(raw, request.headers.get("x-square-hmacsha256-signature") ?? "")) {
     return new Response(null, { status: 401 });
   }
@@ -14,30 +17,25 @@ export async function POST(request: Request) {
   try { payload = JSON.parse(raw); } catch { return new Response(null, { status: 400 }); }
   const event = eventSchema.safeParse(payload);
   if (!event.success) return new Response(null, { status: 400 });
-  if (!["payment.created", "payment.updated"].includes(event.data.type)) return new Response(null, { status: 204 });
+  if (!["payment.created", "payment.updated", "refund.created", "refund.updated"].includes(event.data.type)) return new Response(null, { status: 204 });
 
   try {
-    const payment = await retrievePayment(event.data.data.id);
+    const idFromEvent = event.data.data.id;
+    const paymentId = event.data.type.startsWith("refund.") ? await retrieveRefundPaymentId(idFromEvent) : idFromEvent;
+    if (!paymentId) return new Response(null, { status: 204 });
+    const payment = await retrievePayment(paymentId);
     if (!payment.order_id || payment.status !== "COMPLETED" || payment.location_id !== process.env.SQUARE_LOCATION_ID
-      || payment.amount_money.currency !== "USD" || (payment.refunded_money?.amount ?? 0) > 0) return new Response(null, { status: 204 });
+      || payment.amount_money.currency !== "USD" || payment.amount_money.amount <= 0) return new Response(null, { status: 204 });
 
-    const db = database();
-    const { data, error } = await db.from("bookings").select().eq("square_order_id", payment.order_id).maybeSingle<Booking>();
+    const { data: id, error } = await database().rpc("record_square_payment", {
+      p_order: payment.order_id,
+      p_payment: payment.id,
+      p_amount: payment.amount_money.amount,
+      p_refunded: payment.refunded_money?.amount ?? 0,
+      p_paid_at: payment.created_at,
+    });
     if (error) throw error;
-    if (!data || data.deposit_cents !== payment.amount_money.amount) return new Response(null, { status: 204 });
-
-    if (data.status === "awaiting_deposit") {
-      const { error: updateError } = await db.from("bookings").update({
-        status: "confirmed", square_payment_id: payment.id, confirmed_at: new Date().toISOString(),
-      }).eq("id", data.id).eq("status", "awaiting_deposit");
-      if (updateError) throw updateError;
-    }
-
-    const { data: current, error: currentError } = await db.from("bookings").select().eq("id", data.id).single<Booking>();
-    if (currentError) throw currentError;
-    if (current.status === "confirmed" && current.square_payment_id === payment.id) {
-      await sendBookingEmail(current, "confirmation");
-    }
+    if (id) after(() => drainNotifications(id).catch(() => undefined));
     return new Response(null, { status: 204 });
   } catch {
     return new Response(null, { status: 503 });

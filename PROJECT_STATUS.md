@@ -4,30 +4,21 @@ Updated 2026-11-27.
 
 ## Repository and workflow
 
-- GitHub target is [nathanbanketa/Grace-Transportation](https://github.com/nathanbanketa/Grace-Transportation). The initial app is commit `9840c8d`.
-- The owner works from a phone. Codex owns all terminal work and opens pull requests. Use the browser instructions in the README for provider configuration.
-- On resumption, check the GitHub default branch, open PRs and current checkout before starting changes.
+- [GitHub repository](https://github.com/nathanbanketa/Grace-Transportation) contains the public site and driver dashboard. PR #1 established the initial app on `main`. The reservation expansion is on `codex/reservation-management`.
+- The owner uses a phone. Codex performs development, test and Git operations in Cloud and opens pull requests. Browser provider setup is in the README.
 
 ## Implemented
 
-- Next.js App Router, TypeScript and Tailwind. Responsive DFW landing page, temporary dove-and-SUV mark and illustrative Suburban hero.
-- Three-step booking request with shared validation, Dallas pickup times and airport details. Requests start pending in Supabase.
-- Allowlisted driver dashboard for review, pricing, approval, deposit requests and reservation status updates.
-- Square hosted checkout and signed payment webhook. Server-side payment verification gates confirmation. Resend sends deposit and confirmation emails.
+- The original public layout and booking form are preserved. Intake now uses transactional request deduplication, private quota keys, rate limits and validated PostgreSQL persistence.
+- The driver dashboard includes a live request feed, upcoming rides, history, address and contact shortcuts, pricing, checkout, a two-week schedule, availability editing, customer history, payment history and a booking timeline.
+- The versioned database models customers, an active driver, bookings, checkouts, payments, availability, notifications and booking history. PostgreSQL enforces schedule conflicts and valid transitions.
+- Square deposit links follow driver approval. Verified Square events reconcile payment and refund state. Payments for stale, retired or mismatched orders are flagged for review. Resend jobs, optional driver SMS and driver push use a durable outbox.
+- The driver PWA has an admin-scoped service worker and install manifest. It does not cache booking data.
 
-## Verified
+## Verification and next steps
 
-- Initial app passed lint, TypeScript, six unit tests and the production build.
-- The initial SQL migration and key state transitions passed in an isolated PostgreSQL instance. Anonymous and authenticated database roles were denied booking reads.
-- The prerendered page passed CTA checks. The managed preview could not bind its port, so interactive browser QA remains open.
-
-## Launch blockers
-
-- Configure separate test and production provider settings through the browser dashboards. No deployed environment or live payment flow has been verified.
-- Run a complete sandbox booking through approval, deposit checkout and confirmation email. Verify access control, webhook replay and email retry behavior.
-- Obtain approved brand artwork, actual vehicle photography if available, business contact details, pricing and cancellation/refund terms.
-- Set booking rate limits, retention and recovery procedures. Refunds, deposit expiration, remaining balances and new-request driver alerts remain manual or unimplemented.
-
-## Next session
-
-Start with the test deployment and booking flow in the README. Codex should run browser QA once an authenticated preview or test deployment is reachable, then update this file with the deployment URL and observed results. Keep credentials out of Git and chat.
+- The Cloud checks cover lint, TypeScript, nine tests and the production build. PostgreSQL tests cover transitions, schedule conflicts, access control, duplicate submission, rate limits, payment replay, checkout retirement and legacy data import.
+- Mobile Chromium passed the booking form, admin redirect and sign-in, ride detail, schedule layout, manifest and service worker smoke test against a local Supabase API fixture. This did not exercise live providers.
+- Configure separate test provider projects from the browser. Apply the migrations in order and provision Temesgen’s active driver record.
+- Run a real Square Sandbox approval, payment, refund and checkout retirement, and verify Resend, dashboard updates and push on actual devices. No live integrations or deployment have been verified.
+- Before launch, confirm business policies and artwork and define operational monitoring, retention and reconciliation. Scheduled checkout expiry, automatic refunds and remaining balance collection remain outside this implementation.

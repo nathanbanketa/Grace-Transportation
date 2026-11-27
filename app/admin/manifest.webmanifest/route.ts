@@ -6,8 +6,8 @@ export function GET() {
     start_url: "/admin",
     scope: "/admin",
     display: "standalone",
-    background_color: "#EDF0F5",
-    theme_color: "#EDF0F5",
+    background_color: "#111214",
+    theme_color: "#111214",
     icons: [
       { src: "/driver-icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
       { src: "/driver-icon-512.png", sizes: "512x512", type: "image/png", purpose: "any maskable" },

@@ -1,38 +1,40 @@
-/* Hallmark · theme: custom · genre: editorial · hero: Stage · redesign: full · signature: Dallas masthead and full-width vehicle panorama */
-/* Critique · The local name, useful booking action and recognizable vehicle carry the first screen. */
-/* Hallmark · waive 44c · the Suburban panorama begins below the Dallas masthead · The leading vehicle image occupies the desktop fold below the booking action. */
-/* Hallmark · waive 79 · the Suburban panorama covers the measured gap below the masthead · The image is visible throughout the region the text-only probe reports as empty. */
+/* Hallmark · theme: custom · genre: editorial · hero: Poster · posture: restrained · redesign: full · signature: edge-to-edge Suburban photograph */
+/* Critique · The vehicle sets the scene. A service name, location and one action tell riders how to book. */
+/* Hallmark · waive 23 · the single Book Ahead button is the only solid action-colored surface · The vehicle backdrop contains pale limestone that the palette probe counts as accent. */
 @import "tailwindcss";
 
 @theme {
-  --color-canvas: #EDF0F5;
-  --color-surface: #FAFBFD;
-  --color-tint: #E4E9F2;
-  --color-line: #D5DCE8;
-  --color-border: #B5C0D2;
-  --color-control: #74829B;
-  --color-text: #142037;
-  --color-secondary: #45536B;
-  --color-accent: #253FB4;
-  --color-accent-active: #1B2D85;
-  --color-accent-ink: #F6F8FF;
-  --color-accent-tint: #DCE4FF;
-  --color-dark: #15213A;
-  --color-on-dark: #F1F5FF;
-  --color-muted-on-dark: #C7D1E5;
-  --color-error: #91282F;
-  --color-error-surface: #FBE3E4;
-  --color-warning: #734606;
-  --color-warning-surface: #F7EAD5;
-  --color-success: #1D6246;
-  --color-success-surface: #DEEFE6;
-  --color-disabled-text: #556078;
+  --color-canvas: #111214;
+  --color-surface: #191B1E;
+  --color-tint: #202327;
+  --color-line: #2A2D31;
+  --color-border: #3D4147;
+  --color-control: #747981;
+  --color-text: #F3F3F1;
+  --color-secondary: #B9BCC1;
+  --color-accent: #F3F3F1;
+  --color-accent-active: #D7DADF;
+  --color-accent-ink: #141517;
+  --color-accent-tint: #2B3036;
+  --color-dark: #0D0E10;
+  --color-on-dark: #F3F3F1;
+  --color-muted-on-dark: #C9CCD1;
+  --color-error: #FFC4C4;
+  --color-error-surface: #391F24;
+  --color-warning: #F3D4A0;
+  --color-warning-surface: #392D1E;
+  --color-success: #B5E0C5;
+  --color-success-surface: #1E3328;
+  --color-disabled-text: #A9ADB5;
+  --color-hero-deep: rgb(13 14 16 / .98);
+  --color-hero-shade: rgb(13 14 16 / .82);
+  --color-hero-mid: rgb(13 14 16 / .45);
   --font-body: "Inter Variable", sans-serif;
   --font-display: "Archivo Variable", "Inter Variable", sans-serif;
 }
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
   --shell: 82.5rem;
   --gutter: clamp(1rem, 4.2vw, 4rem);
   --radius-control: .2rem;
@@ -51,7 +53,7 @@ h2 { font-size: clamp(2.7rem, 5.7vw, 5.2rem); }
 .shell { width: min(calc(100% - 2 * var(--gutter)), var(--shell)); margin-inline: auto; }
 .skip-link { position: absolute; z-index: 20; top: .5rem; left: .5rem; padding: .75rem; color: var(--color-accent-ink); background: var(--color-accent); transform: translateY(-150%); }
 .skip-link:focus { transform: none; }
-.site-header { border-bottom: 1px solid var(--color-border); }
+.site-header { background: var(--color-dark); color: var(--color-on-dark); border-bottom: 1px solid var(--color-border); }
 .header-inner { min-height: 64px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .5rem; align-items: center; }
 .brand { display: inline-flex; align-items: center; gap: .48rem; width: fit-content; color: inherit; }
 .brand svg { flex: none; width: 40px; height: 36px; }
@@ -60,40 +62,43 @@ h2 { font-size: clamp(2.7rem, 5.7vw, 5.2rem); }
 .brand small { font-size: .75rem; margin-top: .12rem; }
 .public-nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .6rem .85rem; color: var(--color-secondary); font-size: .85rem; }
 .public-nav a { display: inline-flex; align-items: center; min-height: 44px; }
-.public-nav a:hover { color: var(--color-accent-active); text-decoration: underline; text-underline-offset: .22em; }
+.public-nav a:hover { color: var(--color-on-dark); text-decoration: underline; text-underline-offset: .22em; }
 .button { display: inline-flex; width: fit-content; min-height: 48px; padding: .65rem 1rem; align-items: center; justify-content: center; gap: .5rem; border: 1px solid var(--color-control); border-radius: var(--radius-control); text-align: center; font-size: .9rem; font-weight: 650; cursor: pointer; }
 .button-outline:hover { background: var(--color-tint); }
 .button-light { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-accent-ink); }
 .button-light:hover { background: var(--color-accent-active); border-color: var(--color-accent-active); }
 .button:active:not(:disabled) { transform: translateY(1px); }
 .button:disabled { background: var(--color-tint); color: var(--color-disabled-text); border-color: var(--color-border); cursor: wait; }
-.header-inner .button { display: none; min-height: 44px; padding-inline: .8rem; }
 
-.hero { padding-block: clamp(1.8rem, 4vw, 3.25rem) 1.5rem; }
-.hero-mast { display: grid; grid-template-columns: minmax(0, 1fr); gap: .5rem; padding-bottom: clamp(1.1rem, 2.8vw, 2.4rem); }
-.hero h1 { font-size: clamp(3.35rem, 11.8vw, 10.6rem); letter-spacing: -.085em; text-wrap: wrap; }
-.hero-copy { align-self: end; color: var(--color-secondary); }
-.hero-copy .button { margin-top: .75rem; }
-.hero-copy p { max-width: 28ch; font-size: clamp(1rem, 1.65vw, 1.25rem); line-height: 1.42; }
-.hero-photo { position: relative; aspect-ratio: 1.22; background: var(--color-dark); color: var(--color-on-dark); }
-.hero-photo img { object-fit: cover; object-position: 70% 53%; }
-.hero-visual figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; column-gap: 1rem; padding-block: .65rem; border-bottom: 1px solid var(--color-border); color: var(--color-secondary); font-size: .8rem; }
+.hero { position: relative; isolation: isolate; color: var(--color-on-dark); background: var(--color-dark); }
+.hero-photo { position: absolute; inset: 0 0 auto; height: clamp(17.5rem, 85vw, 30rem); z-index: -1; }
+.hero-photo img { object-fit: cover; object-position: 70% 54%; }
+.hero-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 52%, var(--color-hero-mid) 74%, var(--color-dark));
+}
+.hero-inner {
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(29rem, 125vw, 38rem);
+  padding-block: clamp(16rem, 75vw, 23rem) 2rem;
+}
+.hero-copy { min-width: 0; }
+.hero h1 { font-size: clamp(2.85rem, 10vw, 6rem); line-height: .98; letter-spacing: -.068em; text-wrap: wrap; }
+.hero-copy p { margin-block: .75rem 1.1rem; color: var(--color-muted-on-dark); font-size: clamp(1rem, 1.6vw, 1.2rem); }
 
 .services-section { padding-block: var(--section-space); }
-.services-section h2 { max-width: 17ch; margin-bottom: clamp(1.4rem, 4vw, 3rem); }
-.desktop-break { display: none; }
-.service-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(1rem, 3vw, 2.25rem); }
-.airport-service { background: var(--color-dark); color: var(--color-on-dark); padding: clamp(1.25rem, 3.6vw, 2.75rem); }
-.airport-service h3 { font-family: var(--font-display); font-weight: 650; font-size: 1.75rem; line-height: 1.15; letter-spacing: -.045em; }
-.airport-service p { margin: .55rem 0 1.5rem; max-width: 42ch; color: var(--color-muted-on-dark); line-height: 1.55; }
-.airport-list div { display: grid; grid-template-columns: 3.15rem minmax(0, 1fr); align-items: baseline; gap: var(--grid-gap); border-top: 1px solid var(--color-control); padding-block: .7rem; }
-.airport-list dt { font-family: var(--font-display); font-weight: 650; font-size: 1.25rem; }
-.airport-list dd { color: var(--color-muted-on-dark); font-size: .9rem; }
-.service-list { border-top: 1px solid var(--color-border); }
-.service-list article { display: grid; grid-template-columns: minmax(0, 1fr); gap: .3rem 1rem; padding-block: .85rem; border-bottom: 1px solid var(--color-border); }
-.service-list h3 { font-size: 1rem; font-weight: 650; }
-.service-list p, .about-section > p { color: var(--color-secondary); line-height: 1.55; }
-
+.services-section h2 { margin-bottom: clamp(1.4rem, 4vw, 3rem); }
+.service-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(1.15rem, 3vw, 2.5rem); }
+.airport-service { background: var(--color-surface); color: var(--color-text); padding: clamp(1.15rem, 3.5vw, 2.25rem); }
+.airport-service h3 { font-family: var(--font-display); font-weight: 650; font-size: 1.6rem; line-height: 1.15; letter-spacing: -.035em; margin-bottom: 1rem; }
+.airport-list div { display: grid; grid-template-columns: 3.15rem minmax(0, 1fr); align-items: baseline; gap: var(--grid-gap); border-top: 1px solid var(--color-border); padding-block: .65rem; }
+.airport-list dt { font-family: var(--font-display); font-weight: 650; font-size: 1.15rem; }
+.airport-list dd { color: var(--color-secondary); font-size: .9rem; }
+.service-list { border-bottom: 1px solid var(--color-border); }
+.service-list li { padding-block: .78rem; border-top: 1px solid var(--color-border); font-weight: 600; }
 .booking-band { background: var(--color-tint); color: var(--color-text); border-block: 1px solid var(--color-border); }
 .booking-section { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; align-items: start; padding-block: clamp(2.5rem, 5vw, 4.75rem); }
 .section-heading h2 { max-width: 9ch; }
@@ -122,29 +127,30 @@ h2 { font-size: clamp(2.7rem, 5.7vw, 5.2rem); }
 .booking-receipt dd { overflow-wrap: anywhere; }
 .about-section { display: grid; grid-template-columns: minmax(0, 1fr); align-items: end; gap: 1.25rem 3rem; padding-block: var(--section-space); }
 .about-section h2 { max-width: 12ch; }
-.about-section > p { max-width: 45ch; font-size: clamp(1rem, 2vw, 1.35rem); }
+.about-section > p { color: var(--color-secondary); line-height: 1.55; max-width: 45ch; font-size: clamp(1rem, 2vw, 1.35rem); }
 .site-footer { border-top: 1px solid var(--color-border); }
 .footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .8rem 2rem; padding-block: 1.5rem; font-size: .875rem; }
-.footer p { color: var(--color-secondary); }
 .fallback-page { max-width: 36rem; display: grid; gap: 3rem; padding-block: 1.5rem 3rem; }
 .fallback-content { border-top: 1px solid var(--color-border); padding-top: 1.5rem; }
 .fallback-content h1 { font-size: clamp(2rem, 5vw, 3rem); }
 
 @media (min-width: 560px) {
-  .header-inner { min-height: 72px; padding-top: 0; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+  .header-inner { min-height: 72px; }
   .public-nav { gap: 1.5rem; }
-  .header-inner .button { display: inline-flex; justify-self: end; }
-  .hero-photo { aspect-ratio: 2.3; }
   .fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero-photo { height: auto; inset: 0; }
+  .hero-photo img { object-position: 68% 54%; }
+  .hero-photo::after {
+    background:
+      linear-gradient(to right, var(--color-hero-shade), var(--color-hero-mid) 38%, transparent 70%),
+      linear-gradient(to top, var(--color-hero-deep), transparent 48%);
+  }
+  .hero-inner { min-height: clamp(32rem, 54vw, 48.5rem); padding-block: 6rem clamp(2.5rem, 5.5vw, 5.5rem); }
+  .hero h1 { max-width: 11ch; }
 }
 @media (min-width: 860px) {
-  .hero-mast { grid-template-columns: minmax(0, 1fr) minmax(13rem, .26fr); align-items: end; gap: 1rem; }
-  .hero h1 { font-size: clamp(5.1rem, 10.9vw, 10.6rem); }
-  .hero-copy { padding-bottom: .15rem; }
-  .hero-photo { aspect-ratio: 2.65; }
-  .desktop-break { display: initial; }
   .service-layout { grid-template-columns: minmax(0, .9fr) minmax(0, 1.25fr); }
-  .service-list article { grid-template-columns: minmax(0, .9fr) minmax(0, 1.55fr); }
+  .service-list li { padding-block: .82rem; }
   .booking-section { grid-template-columns: minmax(0, .65fr) minmax(0, 1.35fr); column-gap: clamp(2rem, 5vw, 5rem); }
   .about-section { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

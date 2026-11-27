@@ -1,4 +1,4 @@
-/* Hallmark · driver interface · quiet blue workspace · list-first reservation workflow */
+/* Hallmark · driver interface · charcoal workspace · list-first reservation workflow */
 /* Critique · Keep the next ride action near route details. */
 .driver-shell h1, .driver-shell h2, .driver-login h1 { text-wrap: balance; font-family: var(--font-body); }
 .driver-shell {
@@ -57,7 +57,7 @@
   cursor: pointer;
 }
 .driver-link:hover { background: var(--color-tint); }
-.driver-header .driver-link:hover { background: var(--color-accent-active); }
+.driver-header .driver-link:hover { background: var(--color-tint); }
 .driver-header :focus-visible { outline-color: var(--color-on-dark); }
 .driver-title { margin: .85rem 0 1.45rem; }
 .driver-title h1 { font-family: var(--font-display); font-size: clamp(2.1rem, 4.8vw, 3.95rem); font-weight: 650; letter-spacing: -.045em; overflow-wrap: anywhere; }

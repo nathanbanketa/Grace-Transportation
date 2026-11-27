@@ -1,7 +1,7 @@
 # Grace Transportation project instructions
 
 - Use Next.js App Router, strict TypeScript, Tailwind CSS, Supabase/PostgreSQL, Square and Resend. Target Vercel on Node.js 22 or later.
-- Preserve the dark palette, dove-and-SUV identity and black Chevrolet Suburban. Use “Book Ahead” as the main call to action and “Continue to Booking Details” for the first booking step.
+- Follow the current Hallmark-based system in `DESIGN.md`. Earlier appearance requirements do not lock the palette, assets, typography, page composition or UI copy. Use verified business facts and preserve functional paths.
 - Display pickup times in America/Chicago and store timestamps in UTC. Store USD amounts in integer cents.
 - Treat public submissions as pending requests. Require authenticated driver approval and pricing before requesting a deposit. Confirm only after server-side payment verification.
 - Validate customer input on both sides. Verify the Supabase user and administrator allowlist before every dashboard read or mutation.
@@ -29,5 +29,5 @@
 
 - Read root `DESIGN.md` and the relevant repository design skills under `.agents/skills/` before creating or changing any user-facing component, page, style or interaction.
 - Hallmark is pinned in `.agents/skills/hallmark/`. Read its `SKILL.md` and relevant references, then review any helper script before running it. Repository design standards and explicit owner direction govern existing Grace UI.
-- Use `docs/design-audit.md` as the pre-redesign baseline. The owner confirmed the skill list and authorized the overhaul.
+- Use `docs/design-audit.md` as historical context. The owner authorized a custom Hallmark design with freedom to replace the earlier visual direction.
 - Use the shared tokens and component states, preserve existing backend and UI wiring, and verify the rendered experience across phone, tablet and desktop. Update `DESIGN.md` with intentional system changes.

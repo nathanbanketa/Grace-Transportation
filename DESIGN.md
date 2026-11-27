@@ -1,64 +1,33 @@
 # Grace Transportation design system
 
-This is the authoritative design reference for new and revised Grace Transportation UI. The design system is implemented in the shared and driver stylesheets. The pre-redesign reference is recorded in [the design audit](docs/design-audit.md).
+The current implementation is a custom Hallmark direction for a Dallas and Fort Worth private SUV service. Read the vendored [Hallmark skill](.agents/skills/hallmark/SKILL.md) before a visual redesign. The earlier dark styling, layout and image are historical choices. The owner granted discretion over appearance.
 
-## Brand and product
+## The public site
 
-Grace is a Dallas–Fort Worth private SUV service for advance-booked transportation. The dove-and-SUV mark and black Chevrolet Suburban carry the identity. Use a dark editorial composition, clear language and authentic imagery. Keep the existing illustration identified as such in project documentation and use owner-approved vehicle photography when available. Use existing verified service details. Do not add ratings, guarantees, prices or credentials without a source.
+Give Dallas the opening line. The wide “Dallas, driven.” masthead and the photograph underneath set the scale of the site. Keep the booking action visible before scrolling on common desktop and phone sizes. The hero illustration shows an example vehicle, without claiming to be a photograph of Temesgen’s actual Suburban. Replace it with a verified vehicle photograph when the owner provides one.
 
-The public site should help someone understand the service and request a trip. The dashboard should help Temesgen read a queue and act on a ride from a phone. They share brand assets and control standards. The public site can give photography and display typography room. Operational screens use a denser sans-serif hierarchy, with color reserved for meaningful states.
+Use the specific things customers look for. DFW and DAL anchor an airport service feature. Secondary services form a compact directory. The booking area sits on a blue-tinted ground with a single light work surface, followed by the driver introduction and a simple footer. Retain verified service, fleet, region and experience details. Avoid unsupported claims, ratings, safety guarantees and prices.
 
-## Tokens
+## The driver workspace
 
-Semantic colors and font roles live in the Tailwind theme in `app/globals.css`. The same stylesheet provides the shared control, shell, section spacing and motion rules. `app/admin/driver.css` consumes those tokens for compact driver layouts. Avoid standalone colors and font declarations in components.
+The same light surfaces and ink support daily use. A navy header separates the private workspace from the public site. Keep phone navigation within thumb reach and put status near rider and route information. Wider queue rows align rider, route and pickup information into columns. Keep destructive actions in their own disclosure, preserve keyboard navigation and leave room for long addresses and references.
 
-| Role | Baseline value | Use |
-| --- | --- | --- |
-| Canvas | `#0B0B0C` | Primary background |
-| Surface | `#121214` | Meaningful grouping and navigation |
-| Raised surface | `#1B1C1F` | Selected controls and raised content |
-| Subtle divider | `#26282C` | Decorative separators |
-| Border | `#34363B` | Surface boundaries. Use a stronger token where the border identifies a control |
-| Control boundary | `#686B72` | Inputs and outlined buttons |
-| Quiet detail | `#6E7177` | Nonessential detail, subject to contrast checks |
-| Primary text and focus | `#F1F1EF` | Reading, focus indicators and light primary actions |
-| Secondary text | `#B6B8BC` | Supporting content, labels and help text |
+## Shared visual language
 
-Success, warning, error and disabled controls use shared foreground and surface tokens. Verify their contrast in context and pair them with text. Keep public surfaces monochromatic. Use an off-white primary action with dark text and verify inverse states. Use spacing increments of 4, 8, 12, 16, 24, 32, 48, 64 and 96 px. Default to an 8 px control radius, restrained panel radii and flat surfaces. Round only where the component needs it, such as a status chip.
+| Role | Value |
+| --- | --- |
+| Canvas | `#EDF0F5` |
+| Surface and tint | `#FAFBFD`, `#E4E9F2` |
+| Ink and secondary text | `#142037`, `#45536B` |
+| Dark feature and workspace header | `#15213A` |
+| Action and active action | `#253FB4`, `#1B2D85` |
+| Divider, border and control outline | `#D5DCE8`, `#B5C0D2`, `#74829B` |
 
-## Typography and layout
+- Semantic tokens are declared in `app/globals.css` and consumed by `app/admin/driver.css`. Keep warning, success, and error text paired with a meaningful state label.
+- Use Archivo for display type and Inter for reading, inputs and denser operations. The masthead can scale aggressively. Keep body text near 16 px and use smaller type for genuinely secondary information. Use tabular numerals for operational counts and prices.
+- Use a centered 1,320 px shell, responsive gutters, small control radii and clear rules. Use spacing to group tasks. Avoid decorative pills, filler labels, icon decoration, stock gradients and repeated equal-weight card grids.
+- Keep native controls, visible keyboard focus, labeled errors, pending feedback and distinct empty, error and receipt states. WCAG 2.2 AA is the target. Maintain 44 px primary touch targets, verify reflow at 320 px, and honor reduced motion. Motion should provide short feedback.
 
-- Preserve the mark’s lettering. Use the local Playfair Display face for public display headings and local Inter for body copy, controls and the driver dashboard. Public display starts around 36 px on phones and scales toward 80 px when space permits. Driver screen titles use approximately 28–40 px. Use 16 px body and form inputs, 14 px supporting labels, and 12 px only for secondary metadata. Use tabular numerals for fares, dates where useful, and counts.
-- Keep the page shell capped near 1,280 px, with 16 px phone gutters and 24–48 px gutters at larger sizes. Cap reading measure near 65 characters. Use 12–24 px between related controls and 48–96 px between major public sections. Driver screens use smaller, consistent row and section spacing.
-- Choose a single visual priority per viewport. Keep image-bearing grid tracks shrinkable and allow long headlines, addresses, names, IDs, and amounts to wrap. Start with one column and add columns where they save scanning time. Respect both safe-area insets and the on-screen keyboard.
+## Inspection and release
 
-## Components, states and accessibility
-
-- Use shared button, link, form field, progress, notice, status, empty state and list-row styles. Use native links for navigation and buttons for actions. Give each section one obvious primary action. Keep destructive actions separate with clear consequences.
-- Use persistent labels, useful autocomplete, explicit Central time where relevant, and specific field-level errors linked to their inputs. Preserve entered values after an error. Mark the active booking step, move focus deliberately, and distinguish booking request received from reservation confirmed. Show the reference without clipping.
-- Design default, hover, keyboard focus, pressed, disabled, pending, success, empty and error states. Keep pending labels or activity indicators local to the action, prevent duplicate submits, and avoid moving the control while the user waits. Empty states explain what will appear and offer a valid next action when one exists.
-- Target WCAG 2.2 AA. Verify 4.5:1 normal text contrast and 3:1 large text and meaningful nontext contrast. Use visible `:focus-visible` rings, landmarks, logical heading and tab order, skip navigation where appropriate, and 44 px touch targets for primary, navigation and frequently used controls. Use text as well as color for state. Test reflow at 320 px and 200% zoom, screen-reader labels, and focus visibility above fixed controls.
-- Use brief 120–200 ms transitions for feedback, favoring opacity and transform. Keep content visible without scripting. Honor reduced motion, including scroll and any reveal. Avoid auto-playing media, parallax and animation that delays loaded content.
-
-## Customer experience
-
-Lead with the vehicle, a concrete service description and **Book Ahead**. Keep the vehicle image dominant and the action visible in the initial desktop viewport. Use typography and alignment to organize services. Keep small-screen access to Services and About. Preserve **Continue to Booking Details** and the existing trip, contact and review data. Use the available width for clear input groups and a useful review. Explain that the request is pending until the existing booking process confirms it. Give driver sign-in the same brand and field standards, with a compact, phone-friendly form.
-
-## Driver experience
-
-Make Requests, Upcoming, Schedule, History and Payments distinct destinations. Prefer a dated list or agenda, with status and the next meaningful action close to the ride details. On mobile keep common destinations reachable by thumb and place price, approve, start or complete where the driver can find them without passing ancillary history. Make call, text and navigation links explicit. Group editing and destructive controls separately. Keep the schedule scannable when open days dominate, and give prices and payment states stable alignment. Refresh data without moving focus or disturbing in-progress input. Use established ride-management conventions with Grace’s own layout and visual identity.
-
-## Patterns to avoid
-
-Avoid gradient ambience, glass panels, ornamental icons, all-capital section prefaces, decorative counts and dots, excessive pills, nested cards, repeated equal-weight card grids, and typography with no hierarchy. Use a divider or spacing for simple grouping. Use icons for navigation, a recognizable action, or a real state. Give whitespace a job, such as separating tasks or emphasizing an action. Avoid copied proprietary layouts and invented social proof.
-
-## Implemented compositions
-
-- The public header keeps a second navigation row on phones. Editorial sections align a short heading with rows or prose. The hero retains the source image’s 3:2 crop so the vehicle stays in frame.
-- Booking keeps the existing steps and fields, with conditional airport fields, review groups for route, trip and contact, and a distinct pending-request receipt with a wrapping reference.
-- Recognition and action drive the dashboard hierarchy. Summaries use simple metric columns and the queue uses bordered rows. Booking detail places pricing and the active ride action after core route details, then separates passenger information and history. The agenda uses compact open days and an expandable availability form.
-- Shared form primitives cover focus, invalid and disabled states. Server forms can use `components/action-button.tsx` for pending feedback. Navigation remains native, including the booking anchor, keyboard skip links, and dedicated driver and missing-page fallback screens.
-
-## Before shipping a UI change
-
-Read the repository design skills. Capture the existing important routes and states, inventory links, fields, handlers and data dependencies, then compare the result. Review mobile, tablet and desktop screenshots and keyboard behavior. Exercise booking validation and submission, sign-in and protection, all five driver views, key ride and schedule actions, and relevant feedback. Use fixtures for repeatable workflow states and label gaps in live-provider coverage. Run lint, type checks, automated tests and a production build. Update this file if an intentional implementation decision changes the system.
+Review rendered photos, type, clipping, reading order and tap targets on phone, tablet and desktop. Exercise booking validation, review, retry and receipt, authentication, driver destinations and the schedule action. Keep backend routes, field names and provider workflows compatible. Use local fixtures for repeatable UI verification. Document any live-provider coverage separately. Run lint, type checking, tests, production build and Hallmark’s public render audit before opening the PR.

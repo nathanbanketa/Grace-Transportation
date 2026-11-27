@@ -31,3 +31,10 @@ Updated 2026-11-27.
 - The authorized overhaul updates the customer site, booking flow, driver sign-in, dashboard and booking detail. Backend endpoints, database migrations and provider configuration are unchanged.
 - Chromium verified the revised routes at 390, 768 and 1440 px. A separate 320 px check covered keyboard navigation, airport booking validation, submit/retry/receipt, protected sign-in, ride links, cancellation disclosure, availability submission and the missing-page fallback using a local Supabase fixture.
 - Production rollout uses the existing Vercel project and environment variables. Merge the redesign PR and verify that the newest Production deployment tracks the updated `main` commit. No migrations are required for this redesign.
+
+## Custom public-site redesign
+
+- The owner approved a new Hallmark direction after PR #3 retained too much of the earlier visual composition. The current design uses a light blue-gray palette, an oversized Dallas heading, a panoramic illustrative hero, a dedicated airport feature and a matching driver workspace.
+- The Hallmark bundle is already on main. This PR changes application presentation and design documentation without bundling another skill copy.
+- Deploy the new main commit through the existing Vercel project. Preserve the existing configuration and database.
+- The editorial build passed lint, type checks, all nine tests and the production build. Chromium verified phone, tablet and desktop renders and exercised booking retry, driver sign-in and schedule changes with a local API fixture. Hallmark’s public render audit reported zero failures and two documented exceptions where the panoramic image fills the area below the masthead.

@@ -9,7 +9,7 @@ export function Brand() {
         <circle cx="41" cy="31" r="3.5" stroke="currentColor" strokeWidth="1.4"/>
         <path d="M13 13c6 2 10 1 14-3-5 0-9-3-10-8 6 4 10 5 15 5 3-4 7-4 10-1l4 1-5 2c-2 4-7 6-13 6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
-      <span><strong>GRACE</strong><small>TRANSPORTATION</small></span>
+      <span><strong>Grace</strong><small>Transportation</small></span>
     </Link>
   );
 }

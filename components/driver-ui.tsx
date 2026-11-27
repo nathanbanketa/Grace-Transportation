@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, CalendarDays, CarFront, ChevronRight, CircleDollarSign, ClipboardList, History, MapPin, MessageSquare, Navigation, Phone, UsersRound } from "lucide-react";
+import { CalendarDays, CarFront, ChevronRight, CircleDollarSign, ClipboardList, History, MapPin, MessageSquare, Navigation, Phone, UsersRound } from "lucide-react";
 import type { Status } from "@/lib/booking";
 import type { Booking } from "@/lib/database";
 import { currency, formatPickup } from "@/lib/driver-time";
@@ -42,6 +42,7 @@ export type DriverView = (typeof views)[number]["key"];
 
 export function DriverShell({ driver, view, children }: { driver: string; view?: DriverView; children: React.ReactNode }) {
   return <main className="driver-shell">
+    <a className="skip-link" href="#driver-content">Skip to dashboard content</a>
     <header className="driver-header">
       <Brand />
       <form action={signOut}><button className="driver-link">Sign out</button></form>
@@ -53,7 +54,7 @@ export function DriverShell({ driver, view, children }: { driver: string; view?:
           {views.map(({ key, label, icon: Icon }) => <Link key={key} href={`/admin?view=${key}`} aria-current={view === key ? "page" : undefined}><Icon size={19} aria-hidden="true" /> {label}</Link>)}
         </nav>
       </aside>
-      <div className="driver-content">
+      <div className="driver-content" id="driver-content" tabIndex={-1}>
         <DriverLive pushKey={process.env.NEXT_PUBLIC_WEB_PUSH_PUBLIC_KEY} />
         {children}
       </div>
@@ -67,8 +68,8 @@ export function Badge({ status }: { status: Status }) {
 
 export function RideCard({ booking }: { booking: Booking }) {
   return <Link href={`/admin/bookings/${booking.id}`} className="driver-ride">
-    <div className="driver-ride-head"><div><p className="driver-kicker">{booking.trip_type}</p><h3>{booking.customer_name}</h3></div><Badge status={booking.status} /></div>
-    <div className="driver-route"><div><MapPin size={16} aria-hidden="true" /><span>{booking.pickup}</span></div><div><Navigation size={16} aria-hidden="true" /><span>{booking.destination}</span></div></div>
+    <div className="driver-ride-head"><div><h3>{booking.customer_name}</h3><p className="driver-kicker">{booking.trip_type}</p></div><Badge status={booking.status} /></div>
+    <div className="driver-route"><div><span><small>Pickup</small>{booking.pickup}</span></div><div><span><small>Destination</small>{booking.destination}</span></div></div>
     <div className="driver-ride-foot"><span><CalendarDays size={15} aria-hidden="true"/>{formatPickup(booking.pickup_at)} CT</span><span><UsersRound size={15} aria-hidden="true"/>{booking.passengers}</span><ChevronRight size={17} className="driver-chevron" aria-hidden="true" /></div>
   </Link>;
 }
@@ -82,8 +83,8 @@ export function ContactActions({ booking }: { booking: Booking }) {
   return <div className="driver-quick-actions">
     <a className="driver-link" href={`tel:${phone}`}><Phone size={17} /> Call</a>
     <a className="driver-link" href={`sms:${phone}`}><MessageSquare size={17} /> Text</a>
-    <a className="driver-link" href={pickup.href} target="_blank" rel="noreferrer"><MapPin size={17} /> To pickup <ArrowUpRight size={13} /></a>
-    <a className="driver-link" href={map.href} target="_blank" rel="noreferrer"><Navigation size={17} /> Trip route <ArrowUpRight size={13} /></a>
+    <a className="driver-link" href={pickup.href} target="_blank" rel="noreferrer"><MapPin size={17} /> To pickup</a>
+    <a className="driver-link" href={map.href} target="_blank" rel="noreferrer"><Navigation size={17} /> Trip route</a>
   </div>;
 }
 

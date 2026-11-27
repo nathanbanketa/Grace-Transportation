@@ -24,3 +24,10 @@
 - Enforce single-vehicle schedule exclusivity in PostgreSQL. Keep modifications and payments safe under retries and stale updates. Reject price changes after payment unless a new business-approved settlement workflow is implemented.
 - Keep the driver service worker scoped to `/admin`. Avoid caching authenticated responses and exclude customer identifiers, route details, and contact data from push and SMS.
 - Use the PGlite database tests to validate changes to migrations, booking transitions, access controls, and payment reconciliation before pushing.
+
+## User-facing design
+
+- Read root `DESIGN.md` and the relevant repository design skills under `.agents/skills/` before creating or changing any user-facing component, page, style or interaction.
+- Hallmark is pinned in `.agents/skills/hallmark/`. Read its `SKILL.md` and relevant references, then review any helper script before running it. Repository design standards and explicit owner direction govern existing Grace UI.
+- Use `docs/design-audit.md` as the pre-redesign baseline. The owner confirmed the skill list and authorized the overhaul.
+- Use the shared tokens and component states, preserve existing backend and UI wiring, and verify the rendered experience across phone, tablet and desktop. Update `DESIGN.md` with intentional system changes.

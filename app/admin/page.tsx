@@ -1,6 +1,7 @@
+import { ActionButton } from "@/components/action-button";
 import Link from "next/link";
 import { DateTime } from "luxon";
-import { Ban, CalendarDays, CarFront, ClipboardList, CircleDollarSign } from "lucide-react";
+import { Ban, ClipboardList } from "lucide-react";
 import { Badge, DriverNotice, DriverShell, Money, RideCard, views, type DriverView } from "@/components/driver-ui";
 import { requireAdmin } from "@/lib/admin-auth";
 import { database, type Booking } from "@/lib/database";
@@ -17,7 +18,7 @@ const groups = {
 };
 const titles: Record<DriverView, { title: string; text: string }> = {
   requests: { title: "Ride requests", text: "Review and confirm advance bookings." },
-  upcoming: { title: "Upcoming rides", text: "Confirmed reservations and trips in progress." },
+  upcoming: { title: "Upcoming rides", text: "Trips confirmed or in progress." },
   schedule: { title: "Driver schedule", text: "Review the next 14 days and block off unavailable times." },
   history: { title: "Booking history", text: "Completed, declined and cancelled rides." },
   payments: { title: "Payments", text: "Track verified Square deposits and payments that need review." },
@@ -76,9 +77,9 @@ async function rides(view: keyof typeof groups, filter: string | undefined, page
   if ([result, pending, active, completed, alerts].some(({ error }) => error) || !result.data) throw new Error("Could not load rides");
   return <>
     <div className="driver-stats">
-      <Link className="driver-stat" href="/admin?view=requests&state=pending"><ClipboardList size={19} /><span>New requests</span><strong>{pending.count}</strong></Link>
-      <Link className="driver-stat" href="/admin?view=upcoming"><CarFront size={19} /><span>Upcoming</span><strong>{active.count}</strong></Link>
-      <Link className="driver-stat" href="/admin?view=history&state=completed"><CalendarDays size={19} /><span>Completed</span><strong>{completed.count}</strong></Link>
+      <Link className="driver-stat" href="/admin?view=requests&state=pending"><span>New requests</span><strong>{pending.count}</strong></Link>
+      <Link className="driver-stat" href="/admin?view=upcoming"><span>Upcoming</span><strong>{active.count}</strong></Link>
+      <Link className="driver-stat" href="/admin?view=history&state=completed"><span>Completed</span><strong>{completed.count}</strong></Link>
     </div>
     {!!alerts.count && <p className="driver-notice driver-notice-warning">{alerts.count} notification deliveries require review. Check the Resend, push or SMS provider logs before resending.</p>}
     <div className="driver-filters">
@@ -106,19 +107,19 @@ async function schedule(date?: string) {
   if (rides.error || blocks.error) throw new Error("Could not load schedule");
   const days = Array.from({ length: 14 }, (_, index) => start.plus({ days: index }));
   return <>
-    <section className="driver-panel">
-      <h2>Block availability</h2>
+    <details className="driver-panel driver-availability">
+      <summary>Block availability</summary>
       <form action={updateAvailability} className="driver-form">
         <div className="fields">
           <label className="field">Unavailable from (Central)<input name="start" type="datetime-local" required /></label>
           <label className="field">Available again (Central)<input name="end" type="datetime-local" required /></label>
           <label className="field">Private note<input name="note" maxLength={160} /></label>
         </div>
-        <button className="button button-light">Add availability block</button>
+        <ActionButton>Add availability block</ActionButton>
       </form>
-    </section>
+    </details>
     <div className="driver-calendar-heading">
-      <h2>{start.toFormat("MMM d")} – {end.minus({ days: 1 }).toFormat("MMM d, yyyy")}</h2>
+      <h2>{start.toFormat("MMM d")} to {end.minus({ days: 1 }).toFormat("MMM d, yyyy")}</h2>
       <div className="driver-quick-actions">
         <Link className="driver-link" href={`/admin?view=schedule&date=${start.minus({ days: 14 }).toISODate()}`}>Earlier</Link>
         <Link className="driver-link" href="/admin?view=schedule">Today</Link>
@@ -129,12 +130,12 @@ async function schedule(date?: string) {
       const next = day.plus({ days: 1 });
       const onDay = rides.data.filter((ride) => Date.parse(ride.pickup_at) < next.toMillis() && Date.parse(ride.pickup_at) + ride.duration_minutes * 60_000 > day.toMillis());
       const blocked = blocks.data.filter((block) => Date.parse(block.starts_at) < next.toMillis() && Date.parse(block.ends_at) > day.toMillis());
-      return <article className="driver-day" key={day.toISODate()}>
+      return <article className={`driver-day${onDay.length || blocked.length ? " driver-day-active" : ""}`} key={day.toISODate()}>
         <h3>{day.toFormat("ccc, MMM d")}</h3>
         {!onDay.length && !blocked.length && <p>Open</p>}
-        {onDay.map((ride) => <Link className="driver-calendar-ride" key={ride.id} href={`/admin/bookings/${ride.id}`}><b>{ride.customer_name}</b><small>{formatPickup(ride.pickup_at)} · {ride.duration_minutes} min</small><Badge status={ride.status} /></Link>)}
+        {onDay.map((ride) => <Link className="driver-calendar-ride" key={ride.id} href={`/admin/bookings/${ride.id}`}><b>{ride.customer_name}</b><small>{formatPickup(ride.pickup_at)}, {ride.duration_minutes} min</small><Badge status={ride.status} /></Link>)}
         {blocked.map((block) => <div className="driver-calendar-block" key={block.id}>
-          <b><Ban size={14} /> Unavailable</b><small>{formatPickup(block.starts_at)} – {formatPickup(block.ends_at)}</small>
+          <b><Ban size={14} /> Unavailable</b><small>{formatPickup(block.starts_at)} to {formatPickup(block.ends_at)}</small>
           {block.note && <small>{block.note}</small>}
           <details className="driver-disclosure"><summary>Manage block</summary>
             {Date.parse(block.ends_at) > Date.now() && <form className="driver-form" action={updateAvailability}>
@@ -164,9 +165,9 @@ async function payments(page: number) {
   if (stats.error || history.error) throw new Error("Could not load payments");
   return <>
     <div className="driver-stats">
-      <div className="driver-stat"><CircleDollarSign size={19} /><span>Accepted deposits this month</span><strong><Money amount={stats.data.accepted_net_cents} /></strong></div>
-      <div className="driver-stat"><CircleDollarSign size={19} /><span>Refunds on this month’s payments</span><strong><Money amount={stats.data.refunded_cents} /></strong></div>
-      <div className="driver-stat"><CircleDollarSign size={19} /><span>Needs review this month</span><strong>{stats.data.review_count}</strong></div>
+      <div className="driver-stat"><span>Accepted deposits this month</span><strong><Money amount={stats.data.accepted_net_cents} /></strong></div>
+      <div className="driver-stat"><span>Refunds on this month’s payments</span><strong><Money amount={stats.data.refunded_cents} /></strong></div>
+      <div className="driver-stat"><span>Needs review this month</span><strong>{stats.data.review_count}</strong></div>
     </div>
     <section className="driver-panel">
       <h2>Square payment history</h2>

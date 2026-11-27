@@ -22,3 +22,12 @@ Updated 2026-11-27.
 - Configure separate test provider projects from the browser. Apply the migrations in order and provision Temesgen’s active driver record.
 - Run a real Square Sandbox approval, payment, refund and checkout retirement, and verify Resend, dashboard updates and push on actual devices. No live integrations or deployment have been verified.
 - Before launch, confirm business policies and artwork and define operational monitoring, retention and reconciliation. Scheduled checkout expiry, automatic refunds and remaining balance collection remain outside this implementation.
+
+## Design overhaul
+
+- Reservation management PR #2 is merged at `3408f19`. The owner reported successful driver sign-in.
+- Hallmark 2.0.0 is installed in Cloud and vendored under `.agents/skills/hallmark/` with its MIT license and reference materials. Upstream is [nutlope/hallmark at 04977e1](https://github.com/nutlope/hallmark/tree/04977e15f3dfd6ee4b74c887dac3eb52665d6c92/skills/hallmark).
+- `DESIGN.md` defines the persistent standard. `docs/design-audit.md` records the existing UI audit and fixture coverage.
+- The authorized overhaul updates the customer site, booking flow, driver sign-in, dashboard and booking detail. Backend endpoints, database migrations and provider configuration are unchanged.
+- Chromium verified the revised routes at 390, 768 and 1440 px. A separate 320 px check covered keyboard navigation, airport booking validation, submit/retry/receipt, protected sign-in, ride links, cancellation disclosure, availability submission and the missing-page fallback using a local Supabase fixture.
+- Production rollout uses the existing Vercel project and environment variables. Merge the redesign PR and verify that the newest Production deployment tracks the updated `main` commit. No migrations are required for this redesign.

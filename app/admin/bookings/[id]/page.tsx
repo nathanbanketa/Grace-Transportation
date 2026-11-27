@@ -1,3 +1,4 @@
+import { ActionButton } from "@/components/action-button";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { z } from "zod";
@@ -46,19 +47,13 @@ export default async function BookingDetails({ params, searchParams }: {
     <DriverNotice code={message} />
     <ContactActions booking={booking} />
     <div className="driver-detail-grid">
-      <section className="driver-panel">
+      <section className="driver-panel driver-trip">
         <h2>Trip details</h2>
-        <dl className="summary">
+        <dl className="summary trip-route">
           <div><dt>Pickup</dt><dd>{booking.pickup}</dd></div>
           <div><dt>Destination</dt><dd>{booking.destination}</dd></div>
           <div><dt>Pickup time</dt><dd>{formatPickup(booking.pickup_at)} CT</dd></div>
           <div><dt>Estimated duration</dt><dd>{booking.duration_minutes} minutes</dd></div>
-          <div><dt>Passengers</dt><dd>{booking.passengers}</dd></div>
-          <div><dt>Bags</dt><dd>{booking.luggage}</dd></div>
-          <div><dt>Email</dt><dd>{booking.customer_email}</dd></div>
-          <div><dt>Phone</dt><dd>{booking.customer_phone}</dd></div>
-          {booking.airport && <div><dt>Airport</dt><dd>{booking.airport} · {booking.airport_direction} · {booking.flight}</dd></div>}
-          <div><dt>Booking reference</dt><dd>{booking.id}</dd></div>
         </dl>
       </section>
       <section className="driver-panel">
@@ -76,9 +71,9 @@ export default async function BookingDetails({ params, searchParams }: {
               ? <input type="hidden" name="duration" value={booking.duration_minutes}/>
               : <label className="field">Estimated duration (minutes)<input name="duration" type="number" min="15" max="1440" required defaultValue={booking.duration_minutes} /></label>}
           </div>
-          <button className="button button-light" name="action" value={booking.status === "pending" ? "approve" : "price"}>
+          <ActionButton name="action" value={booking.status === "pending" ? "approve" : "price"}>
             {booking.status === "pending" ? "Approve and request deposit" : "Update price and request deposit"}
-          </button>
+          </ActionButton>
         </form>}
         <form action={updateBooking} className="driver-quick-actions">
           <BookingFields booking={booking} />
@@ -96,6 +91,17 @@ export default async function BookingDetails({ params, searchParams }: {
           </form>
         </details>}
       </section>
+      <section className="driver-panel">
+        <h2>Passenger and contact details</h2>
+        <dl className="summary">
+          <div><dt>Passengers</dt><dd>{booking.passengers}</dd></div>
+          <div><dt>Bags</dt><dd>{booking.luggage}</dd></div>
+          <div><dt>Email</dt><dd>{booking.customer_email}</dd></div>
+          <div><dt>Phone</dt><dd>{booking.customer_phone}</dd></div>
+          {booking.airport && <div><dt>Airport</dt><dd>{[booking.airport, booking.airport_direction, booking.flight].filter(Boolean).join(", ")}</dd></div>}
+          <div><dt>Booking reference</dt><dd>{booking.id}</dd></div>
+        </dl>
+      </section>
       {canEdit && <section className="driver-panel">
         <h2>Modify ride</h2>
         <form key={booking.revision} action={updateBooking} className="driver-form">
@@ -109,7 +115,7 @@ export default async function BookingDetails({ params, searchParams }: {
             {booking.airport && <label className="field">Flight number<input name="flight" maxLength={25} required defaultValue={booking.flight ?? ""} /></label>}
             <label className="field">Estimated duration (minutes)<input name="duration" type="number" min="15" max="1440" required defaultValue={booking.duration_minutes} /></label>
           </div>
-          <button className="button button-outline" name="action" value="edit">Save trip changes</button>
+          <ActionButton variant="outline" name="action" value="edit">Save trip changes</ActionButton>
         </form>
       </section>}
       <section className="driver-panel">

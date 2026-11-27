@@ -1,10 +1,14 @@
 # Grace Transportation
 
-Advance-booked private SUV transportation in Dallas–Fort Worth. The public landing page and booking steps are unchanged. Temesgen’s private dashboard is at `/admin` in the same Next.js application.
+Advance-booked private SUV transportation in Dallas–Fort Worth. The public site supports booking requests. Temesgen’s private driver dashboard is at `/admin` in the same Next.js application.
 
 ## Codex Cloud setup for agents
 
 Use Node.js 22 or later. Install with `npm ci`, copy `.env.example` to `.env.local` for a configured test project, apply the migrations in order, and run `npm run dev` in Cloud. Use an authenticated Cloud HTTP preview or a separate Vercel test project. The public design and the form’s review step render without credentials. Storage, admin access, and notifications require the corresponding provider configuration.
+
+## Design references
+
+Read [DESIGN.md](DESIGN.md) and the [design audit](docs/design-audit.md) before changing the UI. Design skills are versioned in `.agents/skills/` so Codex Cloud sessions can use them directly from the checkout.
 
 ## How reservations work
 

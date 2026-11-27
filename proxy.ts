@@ -6,6 +6,7 @@ export async function proxy(request: NextRequest) {
   const { NEXT_PUBLIC_SUPABASE_URL: url, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: key } = process.env;
   if (url && key) {
     const auth = createServerClient(url, key, {
+      cookieOptions: { secure: process.env.NODE_ENV === "production" },
       cookies: {
         getAll: () => request.cookies.getAll(),
         setAll: (values) => {

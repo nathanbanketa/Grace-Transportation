@@ -3,13 +3,14 @@ import { z } from "zod";
 
 export const tripTypes = ["Airport transfer", "Executive transportation", "Family transportation", "Private event", "Hourly booking"] as const;
 export const airports = ["Dallas Fort Worth International (DFW)", "Dallas Love Field (DAL)", "Other airport"] as const;
-export const statuses = ["pending", "approved", "awaiting_deposit", "confirmed", "declined", "cancelled", "completed"] as const;
+export const statuses = ["pending", "approved", "awaiting_deposit", "confirmed", "in_progress", "declined", "cancelled", "completed"] as const;
 export type Status = (typeof statuses)[number];
 export const transitions = {
   pending: ["approved", "declined", "cancelled"],
   approved: ["awaiting_deposit", "declined", "cancelled"],
-  awaiting_deposit: ["confirmed"],
-  confirmed: ["completed", "cancelled"],
+  awaiting_deposit: ["approved", "confirmed", "cancelled"],
+  confirmed: ["in_progress", "cancelled"],
+  in_progress: ["completed", "cancelled"],
   declined: [],
   cancelled: [],
   completed: [],

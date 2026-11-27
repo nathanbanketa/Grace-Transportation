@@ -5,6 +5,13 @@ import type { Status } from "./booking";
 export type Booking = {
   id: string;
   status: Status;
+  customer_id: string;
+  driver_id: string | null;
+  updated_by: string | null;
+  revision: number;
+  duration_minutes: number;
+  square_link_id: string | null;
+  checkout_revision: number | null;
   pickup: string;
   destination: string;
   pickup_at: string;
